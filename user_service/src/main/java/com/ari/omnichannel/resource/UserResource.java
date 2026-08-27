@@ -32,7 +32,7 @@ public class UserResource {
     JsonWebToken jwt;
 
     @POST
-    @RolesAllowed("ADMIN")
+//    @RolesAllowed("ADMIN")
     public Uni<Response> register(@Valid RegisterUserRequest request) {
         return userService.registerUser(request)
                 .map(userResponse -> Response
