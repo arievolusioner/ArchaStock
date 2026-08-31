@@ -33,13 +33,16 @@ public class AuthService {
                 .onItem().ifNull().failWith(() ->
                         new WebApplicationException("Username atau password salah", Response.Status.UNAUTHORIZED)
                 )
-                .map(user -> {
+                .onItem().transformToUni(user -> {
                     if (!user.isActive) {
-                        throw new WebApplicationException("Akun Anda telah dinonaktifkan. Silakan hubungi Admin.", Response.Status.FORBIDDEN);
+                        return Uni.createFrom().failure(
+                                new WebApplicationException("Akun Anda telah dinonaktifkan. Silakan hubungi Admin.", Response.Status.FORBIDDEN)
+                        );
                     }
-
                     if (!BcryptUtil.matches(request.password, user.password)) {
-                        throw new WebApplicationException("Username atau password salah", Response.Status.UNAUTHORIZED);
+                        return Uni.createFrom().failure(
+                                new WebApplicationException("Username atau password salah", Response.Status.UNAUTHORIZED)
+                        );
                     }
 
                     long durationSeconds = 28800; // 8 Jam
@@ -50,7 +53,9 @@ public class AuthService {
                             .expiresIn(Duration.ofSeconds(durationSeconds))
                             .sign();
 
-                    return new LoginResponse(token, durationSeconds, UserResponse.fromEntity(user));
+                    LoginResponse response = new LoginResponse(token, durationSeconds, UserResponse.fromEntity(user));
+
+                    return Uni.createFrom().item(response);
                 });
     }
 
@@ -61,5 +66,4 @@ public class AuthService {
                 .onItem().ifNull().failWith(() -> new NotFoundException("User tidak ditemukan."))
                 .map(UserResponse::fromEntity);
     }
-
 }
