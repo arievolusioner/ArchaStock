@@ -33,6 +33,10 @@ export default function Sidebar() {
               <LayoutDashboard className="w-5 h-5 mr-3" />
               Dashboard
             </NavLink>
+            <NavLink to="/analytics" className={navLinkClass}>
+              <BarChart2 className="w-5 h-5 mr-3" />
+              Analytics
+            </NavLink>
             <NavLink to="/users" className={navLinkClass}>
               <Users className="w-5 h-5 mr-3" />
               Manajemen User
@@ -40,10 +44,6 @@ export default function Sidebar() {
             <NavLink to="/ecommerce" className={navLinkClass}>
               <ShoppingCart className="w-5 h-5 mr-3" />
               E-Commerce
-            </NavLink>
-            <NavLink to="/analytics" className={navLinkClass}>
-              <BarChart2 className="w-5 h-5 mr-3" />
-              Analytics
             </NavLink>
           </div>
         </div>
