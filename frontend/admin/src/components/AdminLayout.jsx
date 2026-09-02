@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { Search, Bell, Moon, UserCircle } from 'lucide-react';
+import { Search, Bell, Moon, UserCircle, ChevronDown, User, LogOut } from 'lucide-react';
 import axiosClient from '../api/axiosClient';
 
 export default function AdminLayout({ setIsAuthenticated }) {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
 
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
   useEffect(() => {
-    // Mengambil data profil user yang sedang login untuk ditampilkan di header
     const fetchProfile = async () => {
       try {
         const response = await axiosClient.get('/api/auth/me');
@@ -18,7 +19,6 @@ export default function AdminLayout({ setIsAuthenticated }) {
         console.error("Gagal memuat profil header:", err);
       }
     };
-
     fetchProfile();
   }, []);
 
@@ -30,11 +30,10 @@ export default function AdminLayout({ setIsAuthenticated }) {
 
   return (
     <div className="flex h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
-      
       <Sidebar />
+      
       <div className="flex-1 flex flex-col overflow-y-auto">
-        
-        <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
+        <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-20">
           
           <div className="flex items-center bg-slate-100 px-4 py-2 rounded-lg w-96 border border-slate-200 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
             <Search className="w-5 h-5 text-slate-400 mr-3" />
@@ -45,29 +44,57 @@ export default function AdminLayout({ setIsAuthenticated }) {
             />
           </div>
 
-          <div className="flex items-center space-x-6">
-            <button className="text-slate-400 hover:text-slate-600 transition">
-              <Moon className="w-5 h-5" />
-            </button>
-            <button className="relative text-slate-400 hover:text-slate-600 transition">
+          <div className="flex items-center space-x-4">
+            {/* <button className="relative text-slate-400 hover:text-slate-600 transition p-2">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-            </button>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            </button> */}
+            <div className="h-8 w-px bg-slate-200 mx-2"></div>
             
-            {/* Bagian Profil Dinamis */}
-            <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
-              <div className="text-right hidden md:block">
-                <p className="text-sm font-semibold text-slate-700">
-                  {profile?.fullName || profile?.username || 'Memuat...'}
-                </p>
-                <p className="text-xs text-slate-500 uppercase">
-                  {profile?.role || 'Administrator'}
-                </p>
-              </div>
-              <button onClick={handleLogout} className="text-slate-400 hover:text-slate-600" title="Logout">
-                <UserCircle className="w-10 h-10 text-slate-300" />
+            <div className="relative">
+              <button 
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                className="flex items-center space-x-3 hover:bg-slate-50 p-2 rounded-lg transition"
+              >
+                <div className="text-right hidden md:block">
+                  <p className="text-sm font-semibold text-slate-700">
+                    {profile?.fullName || profile?.username || 'Memuat...'}
+                  </p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">
+                    {profile?.role || 'Administrator'}
+                  </p>
+                </div>
+                <UserCircle className="w-9 h-9 text-slate-400" />
+                <ChevronDown className="w-4 h-4 text-slate-400" />
               </button>
+
+              {isProfileMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsProfileMenuOpen(false)}></div>
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-xl py-1.5 z-50 flex flex-col overflow-hidden">
+                    
+                    <Link 
+                      to="/profile" 
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      className="flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition relative z-50"
+                    >
+                      <User className="w-4 h-4 mr-3" /> Edit Profil
+                    </Link>
+                    
+                    <div className="border-t border-slate-100 my-1"></div>
+                    
+                    <button 
+                      onClick={handleLogout} 
+                      className="flex items-center px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition w-full text-left relative z-50"
+                    >
+                      <LogOut className="w-4 h-4 mr-3" /> Logout
+                    </button>
+                    
+                  </div>
+                </>
+              )}
             </div>
+
           </div>
         </header>
 
