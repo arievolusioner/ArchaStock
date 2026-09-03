@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, ShoppingCart, BarChart2 } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingCart, BarChart2, FolderKanban, Cuboid } from 'lucide-react';
 import logoApp from '../assets/logo.webp';
 
 export default function Sidebar() {
@@ -41,10 +41,11 @@ export default function Sidebar() {
               <Users className="w-5 h-5 mr-3" />
               Manajemen User
             </NavLink>
-            <NavLink to="/ecommerce" className={navLinkClass}>
-              <ShoppingCart className="w-5 h-5 mr-3" />
-              E-Commerce
+            <NavLink to="/stocks" className={navLinkClass}>
+              <Cuboid className="w-5 h-5 mr-3" />
+              Manajemen Stock
             </NavLink>
+            
           </div>
         </div>
       </nav>

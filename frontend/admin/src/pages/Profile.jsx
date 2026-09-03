@@ -80,7 +80,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Kolom Kanan: Form Ganti Password */}
         <div className="md:col-span-2">
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center">

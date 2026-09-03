@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import AdminLayout from './components/AdminLayout';
 import Users from './pages/Users';
 import Profile from './pages/Profile';
+import Stocks from './pages/Stocks';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/stocks" element={<Stocks/>} />
         </Route>
       </Routes>
     </BrowserRouter>
